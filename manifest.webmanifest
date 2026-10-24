@@ -1,0 +1,18 @@
+{
+  "name": "শেখ এগ্রো",
+  "short_name": "শেখ এগ্রো",
+  "description": "শেখ এগ্রো অনলাইন পণ্য ও অর্ডার",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f8f5",
+  "theme_color": "#176b3a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
