@@ -1,103 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#176b3a">
-<meta name="description" content="শেখ এগ্রো — নেত্রকোনার পণ্য ও অনলাইন অর্ডার">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>শেখ এগ্রো</title>
-<style>
-:root{--green:#176b3a;--light:#f2f8f1;--ink:#183125;--muted:#65756b;--line:#dce8de}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Noto Sans Bengali",sans-serif;background:#f6f8f5;color:var(--ink)}
-header{background:var(--green);color:white;padding:18px 16px 16px;position:sticky;top:0;z-index:3}
-.head{max-width:980px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{font-size:24px;font-weight:800}.sub{font-size:12px;opacity:.9}.pill{border:1px solid #ffffff77;border-radius:20px;padding:7px 10px;font-size:12px;color:white;background:#ffffff12}
-main{max-width:980px;margin:auto;padding:16px}.hero{background:linear-gradient(120deg,#e3f4dc,#fff8df);border-radius:20px;padding:22px;margin-bottom:18px}
-.hero h1{font-size:25px;margin:0 0 8px}.hero p{margin:0;color:#425d49;line-height:1.6}
-.tools{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tools input,.tools select,.field input,.field textarea,.field select{border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;background:white;min-width:0}
-.tools input{flex:1;min-width:170px}.btn{border:0;background:var(--green);color:white;padding:11px 14px;border-radius:12px;font:inherit;font-weight:700;cursor:pointer}.btn.alt{background:#e3efe5;color:var(--green)}.btn.danger{background:#a52a2a}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.product{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.photo{width:100%;aspect-ratio:1.08;object-fit:cover;background:#e9efe7}.product-body{padding:12px;display:flex;flex-direction:column;gap:7px;flex:1}.product h3{font-size:17px;margin:0}.desc{font-size:13px;color:var(--muted);line-height:1.45}.price{font-size:19px;color:var(--green);font-weight:800}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row .btn{flex:1}
-.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}.panel h2{font-size:20px;margin:0 0 12px}.field{display:grid;gap:6px;margin:10px 0}.field label{font-size:13px;font-weight:700;color:#425d49}.field input,.field textarea,.field select{width:100%}.field textarea{min-height:82px}
-.tabs{display:flex;gap:8px;overflow:auto;margin:12px 0}.tabs button{white-space:nowrap}.hidden{display:none!important}.muted{color:var(--muted);font-size:13px}.notice{padding:12px;background:#fff3d4;border-radius:12px;color:#684e15;font-size:13px;line-height:1.5}
-.cartline{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:10px 0}.chatbox{height:220px;overflow:auto;background:#f6f8f5;border:1px solid var(--line);border-radius:12px;padding:10px}.bubble{background:#e4f2e5;padding:9px 11px;border-radius:12px;margin:6px 0;max-width:90%;font-size:14px}.bubble.admin{background:#fff;margin-left:auto;border:1px solid var(--line)}
-footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
-@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero h1{font-size:31px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>শেখ এগ্রো - খাঁটি পণ্যের সমাহার</title>
+    <!-- Tailwind CSS (ডিজাইনের জন্য) এবং jQuery CDN -->
+    <script src="https://jsdelivr.net"></script>
+    <script src="https://jquery.com"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f7fafc; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
-<header><div class="head"><div><div class="brand">🌿 শেখ এগ্রো</div><div class="sub">বিশ্বস্ত পণ্য, সহজ অর্ডার — নেত্রকোনা</div></div><button class="pill" id="adminToggle">অ্যাডমিন</button></div></header>
-<main>
-<section class="hero"><h1>আপনার প্রয়োজনীয় পণ্য, এক জায়গায়</h1><p>পণ্যের ছবি দেখুন, দাম যাচাই করুন, অর্ডার দিন এবং পণ্য সম্পর্কে প্রশ্ন করুন।</p></section>
-<div class="tools"><input id="search" placeholder="পণ্য খুঁজুন…"><select id="category"><option value="">সব বিভাগ</option><option>চাল-ডাল</option><option>মধু</option><option>ফল</option><option>কৃষিপণ্য</option><option>গৃহস্থালি</option><option>পোশাক</option><option>অন্যান্য</option></select><button class="btn alt" id="shareApp">অ্যাপ শেয়ার</button><button class="btn" id="cartOpen">কার্ট (<span id="cartCount">0</span>)</button></div>
-<div id="productGrid" class="grid"></div>
-<section id="cartPanel" class="panel hidden"><h2>আপনার অর্ডার</h2><div id="cartLines"></div><div class="field"><label>আপনার নাম</label><input id="buyerName" placeholder="পুরো নাম"></div><div class="field"><label>মোবাইল নম্বর</label><input id="buyerPhone" inputmode="tel" placeholder="01XXXXXXXXX"></div><div class="field"><label>ডেলিভারির ঠিকানা (নেত্রকোনা জেলা)</label><textarea id="buyerAddress" placeholder="গ্রাম/এলাকা, উপজেলা, পরিচিত স্থান"></textarea></div><div class="field"><label>ডেলিভারির সময়</label><select id="deliverySlot"><option>অ্যাডমিন নিশ্চিত করবেন</option><option>সকাল ৯টা–দুপুর ১২টা</option><option>দুপুর ১২টা–বিকেল ৩টা</option><option>বিকেল ৩টা–সন্ধ্যা ৬টা</option></select></div><p class="muted">পেমেন্ট: ক্যাশ অন ডেলিভারি</p><button class="btn" id="placeOrder">অর্ডার পাঠান</button><p id="orderResult" class="muted"></p></section>
-<section id="questionPanel" class="panel hidden"><h2>পণ্য সম্পর্কে প্রশ্ন</h2><p id="questionProduct" class="muted"></p><div class="field"><label>আপনার নাম (ঐচ্ছিক)</label><input id="chatName" placeholder="নাম"></div><div class="chatbox" id="chatBox"><div class="muted">আপনার প্রশ্ন লিখুন। এই প্রোটোটাইপে বার্তা শুধু এই ডিভাইসেই সংরক্ষিত হয়।</div></div><div class="field"><label>মেসেজ</label><textarea id="chatMessage" placeholder="পণ্য সম্পর্কে কী জানতে চান?"></textarea></div><button class="btn" id="sendMessage">মেসেজ পাঠান</button><p class="muted" id="chatNote"></p></section>
-<section id="adminPanel" class="panel hidden"><h2>অ্যাডমিন প্যানেল (প্রোটোটাইপ)</h2><div class="notice">এটি এখনো নিরাপদ অনলাইন অ্যাডমিন নয়। বাস্তব ব্যবহারের আগে সার্ভার-ভিত্তিক লগইন ও ডেটাবেস সংযুক্ত করতে হবে। এখানে সংরক্ষিত তথ্য শুধু এই ব্রাউজারেই থাকে।</div>
-<div class="tabs"><button class="btn alt" data-tab="productsAdmin">পণ্য</button><button class="btn alt" data-tab="ordersAdmin">অর্ডার</button><button class="btn alt" data-tab="messagesAdmin">মেসেজ</button><button class="btn alt" data-tab="settingsAdmin">ডেলিভারি সেটিংস</button></div>
-<div id="productsAdmin"><h3>পণ্য যোগ / সম্পাদনা</h3><div class="field"><label>পণ্যের নাম</label><input id="pName"></div><div class="field"><label>দাম (টাকা)</label><input id="pPrice" type="number" min="0"></div><div class="field"><label>বিভাগ</label><select id="pCategory"><option>চাল-ডাল</option><option>মধু</option><option>ফল</option><option>কৃষিপণ্য</option><option>গৃহস্থালি</option><option>পোশাক</option><option>অন্যান্য</option></select></div><div class="field"><label>পণ্যের বিবরণ</label><textarea id="pDesc"></textarea></div><div class="field"><label>ছবির URL (পরবর্তী ধাপে সরাসরি ছবি আপলোড যুক্ত হবে)</label><input id="pImage" placeholder="https://..."></div><div class="row"><button class="btn" id="saveProduct">পণ্য সংরক্ষণ</button><button class="btn alt" id="resetProduct">ফর্ম খালি করুন</button></div><div id="adminProductList"></div></div>
-<div id="ordersAdmin" class="hidden"><h3>অর্ডার তালিকা</h3><div id="orderList" class="muted">এখনো অর্ডার নেই।</div></div>
-<div id="messagesAdmin" class="hidden"><h3>ক্রেতার মেসেজ</h3><div id="messageList" class="muted">এখনো মেসেজ নেই।</div><div class="field"><label>নির্বাচিত কথোপকথনে উত্তর</label><textarea id="adminReply" placeholder="উত্তর লিখুন"></textarea></div><button class="btn" id="sendReply">উত্তর সংরক্ষণ</button></div>
-<div id="settingsAdmin" class="hidden"><h3>ডেলিভারি সেটিংস</h3><div class="field"><label>ডেলিভারি এলাকা</label><input id="deliveryArea" value="নেত্রকোনা জেলা"></div><div class="field"><label>ডিফল্ট ডেলিভারির সময়</label><input id="deliveryTime" value="অ্যাডমিন নিশ্চিত করবেন"></div><div class="field"><label>অর্ডার গ্রহণ</label><select id="acceptOrders"><option value="yes">চালু</option><option value="no">সাময়িক বন্ধ</option></select></div><button class="btn" id="saveSettings">সেটিংস সংরক্ষণ</button><p id="settingsSaved" class="muted"></p></div>
-</section>
-<footer>শেখ এগ্রো • নেত্রকোনা জেলা • ক্যাশ অন ডেলিভারি</footer>
-</main>
-<script>
-const $=id=>document.getElementById(id);
-const sample=[
-{id:"a1",name:"দেশি চাল",price:75,category:"চাল-ডাল",desc:"প্রতি কেজি। ছবি ও দাম অ্যাডমিন পরিবর্তন করতে পারবেন।",image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=720&q=72"},
-{id:"a2",name:"খাঁটি মধু",price:450,category:"মধু",desc:"প্রতি বোতল। অর্ডারের আগে পণ্যের বিস্তারিত জেনে নিন।",image:"https://images.unsplash.com/photo-1587049352851-8d4e89133924?auto=format&fit=crop&w=720&q=72"},
-{id:"a3",name:"মৌসুমি ফল",price:120,category:"ফল",desc:"মৌসুম ও প্রাপ্যতা অনুযায়ী।",image:"https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=720&q=72"},
-{id:"a4",name:"কৃষিপণ্য",price:100,category:"কৃষিপণ্য",desc:"স্টক ও দাম নিশ্চিত করতে মেসেজ করুন।",image:"https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=720&q=72"}
-];
-const get=(k,d)=>{try{return JSON.parse(localStorage.getItem("sa_"+k))??d}catch{return d}};
-const put=(k,v)=>localStorage.setItem("sa_"+k,JSON.stringify(v));
-let products=get("products",sample),cart=get("cart",[]),orders=get("orders",[]),messages=get("messages",[]),settings=get("settings",{area:"নেত্রকোনা জেলা",time:"অ্যাডমিন নিশ্চিত করবেন",accept:"yes"}),activeProduct=null,activeThread=null,editId=null;
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function renderProducts(){let q=$("search").value.toLowerCase(),cat=$("category").value;let list=products.filter(p=>(p.name+" "+p.desc).toLowerCase().includes(q)&&(!cat||p.category===cat));$("productGrid").innerHTML=list.map(p=>`<article class="product"><img class="photo" loading="lazy" src="${esc(p.image||"icon.svg")}" alt="${esc(p.name)}" onerror="this.src='icon.svg'"><div class="product-body"><h3>${esc(p.name)}</h3><div class="desc">${esc(p.desc)}</div><div class="price">৳${Number(p.price).toLocaleString("en-BD")}</div><div class="row"><button class="btn" onclick="addCart('${p.id}')">কার্টে নিন</button><button class="btn alt" onclick="askAbout('${p.id}')">প্রশ্ন</button></div></div></article>`).join("")||"<p>কোনো পণ্য পাওয়া যায়নি।</p>";}
-function addCart(id){let p=products.find(x=>x.id===id);let c=cart.find(x=>x.id===id);c?c.qty++:cart.push({id,qty:1});put("cart",cart);renderCart()}
-function renderCart(){$("cartCount").textContent=cart.reduce((n,x)=>n+x.qty,0);$("cartLines").innerHTML=cart.map(c=>{let p=products.find(x=>x.id===c.id);return p?`<div class="cartline"><span>${esc(p.name)} × ${c.qty}</span><strong>৳${p.price*c.qty}</strong><button class="btn alt" onclick="removeCart('${c.id}')">বাদ</button></div>`:""}).join("")||"<p>কার্ট খালি।</p>";let total=cart.reduce((n,c)=>{let p=products.find(x=>x.id===c.id);return n+(p?p.price*c.qty:0)},0);$("cartLines").innerHTML+=`<p><strong>মোট: ৳${total}</strong></p>`}
-function removeCart(id){cart=cart.filter(x=>x.id!==id);put("cart",cart);renderCart()}
-$("cartOpen").onclick=()=>$("cartPanel").classList.toggle("hidden");
-$("search").oninput=renderProducts;$("category").onchange=renderProducts;
-$("placeOrder").onclick=()=>{if(settings.accept==="no"){alert("দুঃখিত, এই মুহূর্তে অর্ডার বন্ধ আছে।");return}if(!cart.length){alert("আগে পণ্য কার্টে নিন।");return}let name=$("buyerName").value.trim(),phone=$("buyerPhone").value.trim(),address=$("buyerAddress").value.trim();if(!name||!phone||!address){alert("নাম, ফোন ও ঠিকানা লিখুন।");return}let o={id:"SA"+Date.now().toString().slice(-7),name,phone,address,slot:$("deliverySlot").value,items:cart.map(c=>({...c,product:products.find(p=>p.id===c.id)?.name||"পণ্য",price:products.find(p=>p.id===c.id)?.price||0})),total:cart.reduce((n,c)=>n+(products.find(p=>p.id===c.id)?.price||0)*c.qty,0),status:"নতুন",created:new Date().toLocaleString("bn-BD")};orders.unshift(o);put("orders",orders);cart=[];put("cart",cart);renderCart();renderAdmin();$("orderResult").textContent="এই ডেমোতে অর্ডারটি শুধু এই ডিভাইসে সংরক্ষিত হয়েছে; বিক্রেতার কাছে পাঠাতে সার্ভার সংযুক্ত করতে হবে। অর্ডার আইডি: "+o.id;};
-function askAbout(id){activeProduct=products.find(p=>p.id===id);$("questionProduct").textContent="পণ্য: "+activeProduct.name;$("questionPanel").classList.remove("hidden");renderChat();$("questionPanel").scrollIntoView({behavior:"smooth"})}
-$("sendMessage").onclick=()=>{let body=$("chatMessage").value.trim();if(!body||!activeProduct)return;messages.push({id:"m"+Date.now(),thread:($("chatName").value.trim()||"অতিথি")+"|"+activeProduct.id,name:$("chatName").value.trim()||"অতিথি",product:activeProduct.name,productId:activeProduct.id,body,from:"buyer",time:new Date().toLocaleString("bn-BD")});put("messages",messages);$("chatMessage").value="";renderChat();renderAdmin();$("chatNote").textContent="ডেমো বার্তা এই ডিভাইসে সংরক্ষিত হয়েছে; বাস্তব বার্তার জন্য অনলাইন ডেটাবেস প্রয়োজন।"};
-function renderChat(){let thread=$("chatName").value.trim()+"|"+activeProduct?.id;let list=messages.filter(m=>m.thread===thread);$("chatBox").innerHTML=list.map(m=>`<div class="bubble ${m.from==="admin"?"admin":""}"><strong>${m.from==="admin"?"শেখ এগ্রো":esc(m.name)}</strong><br>${esc(m.body)}<div class="muted">${esc(m.time)}</div></div>`).join("")||'<div class="muted">এখনো কোনো মেসেজ নেই।</div>'}
-$("adminToggle").onclick=()=>{let pass=prompt("প্রোটোটাইপ অ্যাডমিন PIN লিখুন (ডেমো PIN: 2468)");if(pass==="2468"){$("adminPanel").classList.toggle("hidden");renderAdmin()}else if(pass!==null)alert("PIN সঠিক নয়।");};
-document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{["productsAdmin","ordersAdmin","messagesAdmin","settingsAdmin"].forEach(id=>$(id).classList.add("hidden"));$(b.dataset.tab).classList.remove("hidden")});
-$("saveProduct").onclick=()=>{let name=$("pName").value.trim(),price=Number($("pPrice").value);if(!name||!Number.isFinite(price)||price<0){alert("পণ্যের নাম ও সঠিক দাম দিন।");return}let p={id:editId||"p"+Date.now(),name,price,category:$("pCategory").value,desc:$("pDesc").value.trim(),image:$("pImage").value.trim()||"icon.svg"};if(editId)products=products.map(x=>x.id===editId?p:x);else products.unshift(p);put("products",products);resetProduct();renderProducts();renderAdmin()};
-function resetProduct(){editId=null;["pName","pPrice","pDesc","pImage"].forEach(id=>$(id).value="");$("saveProduct").textContent="পণ্য সংরক্ষণ"}
-$("resetProduct").onclick=resetProduct;
-function renderAdmin(){$("adminProductList").innerHTML="<h4>বর্তমান পণ্য</h4>"+products.map(p=>`<div class="cartline"><span>${esc(p.name)} — ৳${p.price}</span><span><button class="btn alt" onclick="editProduct('${p.id}')">সম্পাদনা</button> <button class="btn danger" onclick="deleteProduct('${p.id}')">মুছুন</button></span></div>`).join("");$("orderList").innerHTML=orders.map(o=>`<div class="panel"><strong>${esc(o.id)} · ${esc(o.name)}</strong><p>${esc(o.phone)}<br>${esc(o.address)}<br>ডেলিভারি: ${esc(o.slot)}<br>মোট: ৳${o.total}<br>অবস্থা: ${esc(o.status)}</p><select onchange="setStatus('${o.id}',this.value)"><option ${o.status==="নতুন"?"selected":""}>নতুন</option><option ${o.status==="নিশ্চিত"?"selected":""}>নিশ্চিত</option><option ${o.status==="পাঠানো হয়েছে"?"selected":""}>পাঠানো হয়েছে</option><option ${o.status==="সম্পন্ন"?"selected":""}>সম্পন্ন</option><option ${o.status==="বাতিল"?"selected":""}>বাতিল</option></select><p class="muted">${o.items.map(i=>esc(i.product)+" × "+i.qty).join(", ")}</p></div>`).join("")||"এখনো অর্ডার নেই।";$("messageList").innerHTML=messages.map(m=>`<div class="panel"><strong>${esc(m.name)} — ${esc(m.product)}</strong><p>${esc(m.body)}</p><p class="muted">${esc(m.time)} · ${m.from==="admin"?"অ্যাডমিনের উত্তর":"ক্রেতার মেসেজ"}</p><button class="btn alt" onclick="selectThread('${m.thread.replace(/'/g,"")}')">এই কথোপকথনে উত্তর দিন</button></div>`).join("")||"এখনো মেসেজ নেই।";$("deliveryArea").value=settings.area;$("deliveryTime").value=settings.time;$("acceptOrders").value=settings.accept}
-function editProduct(id){let p=products.find(x=>x.id===id);editId=id;$("pName").value=p.name;$("pPrice").value=p.price;$("pCategory").value=p.category;$("pDesc").value=p.desc;$("pImage").value=p.image;$("saveProduct").textContent="পরিবর্তন সংরক্ষণ";$("productsAdmin").scrollIntoView({behavior:"smooth"})}
-function deleteProduct(id){if(confirm("এই পণ্যটি মুছবেন?")){products=products.filter(x=>x.id!==id);put("products",products);renderProducts();renderAdmin()}}
-function setStatus(id,status){orders=orders.map(o=>o.id===id?{...o,status}:o);put("orders",orders);renderAdmin()}
-function selectThread(thread){activeThread=thread;let list=messages.filter(m=>m.thread===thread);alert("নির্বাচিত কথোপকথন: "+(list[0]?.name||"ক্রেতা")+" — "+(list[0]?.product||"পণ্য"));$("adminReply").focus()}
-$("sendReply").onclick=()=>{let body=$("adminReply").value.trim();if(!body){alert("উত্তর লিখুন।");return}if(!activeThread){alert("আগে মেসেজের কথোপকথন নির্বাচন করুন।");return}let m=messages.find(x=>x.thread===activeThread);messages.push({id:"m"+Date.now(),thread:activeThread,name:m?.name||"ক্রেতা",product:m?.product||"পণ্য",productId:m?.productId,body,from:"admin",time:new Date().toLocaleString("bn-BD")});put("messages",messages);$("adminReply").value="";renderAdmin();alert("উত্তর এই ডিভাইসে সংরক্ষিত হয়েছে; ক্রেতার কাছে পৌঁছাতে সার্ভার দরকার।")};
-$("saveSettings").onclick=()=>{settings={area:$("deliveryArea").value.trim()||"নেত্রকোনা জেলা",time:$("deliveryTime").value.trim()||"অ্যাডমিন নিশ্চিত করবেন",accept:$("acceptOrders").value};put("settings",settings);$("settingsSaved").textContent="সেটিংস এই ডিভাইসে সংরক্ষিত হয়েছে।"};
 
-$("shareApp").onclick=async()=>{
-  const shareData={
-    title:"শেখ এগ্রো",
-    text:"শেখ এগ্রোতে পণ্য দেখুন ও অর্ডার করুন।",
-    url:location.href
-  };
-  try{
-    if(navigator.share){await navigator.share(shareData);}
-    else if(navigator.clipboard && window.isSecureContext){
-      await navigator.clipboard.writeText(location.href);
-      alert("শেখ এগ্রোর লিংক কপি হয়েছে। এখন Messenger বা Facebook-এ পেস্ট করে শেয়ার করুন।");
-    }else{
-      prompt("এই লিংকটি কপি করে শেয়ার করুন:",location.href);
-    }
-  }catch(err){
-    if(err && err.name!=="AbortError") prompt("এই লিংকটি কপি করে শেয়ার করুন:",location.href);
-  }
-};
+    <!-- হেডার ও নেভিগেশন বার -->
+    <header class="bg-green-600 text-white p-4 flex justify-between items-center shadow-md">
+        <h1 class="text-xl font-bold">শেখ এগ্রো ফার্ম লিমিটেড</h1>
+        <!-- অ্যাডমিন বাটন -->
+        <button id="adminBtn" class="bg-white text-green-600 px-4 py-2 rounded-full font-semibold shadow hover:bg-green-100 transition">
+            অ্যাডমিন প্যানেল
+        </button>
+    </header>
 
-renderProducts();renderCart();renderAdmin();
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-</script>
-</body></html>
+    <!-- মূল ওয়েবসাইট কন্টেন্ট (ভিজিটরদের জন্য) -->
+    <main class="container mx-auto p-6 text-center">
+        <h2 class="text-2xl font-semibold text-gray-800 my-4">আমাদের প্রিমিয়াম পণ্যসমূহ</h2>
+        <p class="text-gray-600">খাঁটি চাল, মধু এবং কৃষি পণ্য সরাসরি খামার থেকে আপনার দুয়ারে।</p>
+        
+        <!-- প্রোডাক্ট ডিসপ্লে গ্রিড -->
+        <div id="productContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <!-- ফায়ারবেস থেকে প্রোডাক্ট লোড হয়ে এখানে আসবে -->
+            <div class="bg-white p-4 rounded-lg shadow text-center">
+                <p class="text-gray-500">পণ্য লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- অ্যাডমিন সেকশন (পিন কোড সফল হলে এটি ওপেন হবে) -->
+    <div id="adminPage" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">অ্যাডমিন অ্যাক্সেস ভেরিফাইড</h3>
+            <p class="text-gray-600 mb-6">পণ্য ব্যবস্থাপনার জন্য নিচের বাটনে ক্লিক করে মূল ফর্মে প্রবেশ করুন।</p>
+            <a href="admin.html" class="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700 block text-center font-medium">
+                পণ্য আপলোড ফর্মে যান
+            </a>
+        </div>
+    </div>
+
+    <!-- জাভাস্ক্রিপ্ট লজিক এবং পিন কোড সিকিউরিটি -->
+    <script>
+        $(document).ready(function() {
+            // অ্যাডমিন বাটনে ক্লিক করলে পিন কোড চাবে
+            $("#adminBtn").on("click", function() {
+                // পিন প্রম্পট বক্স
+                let pass = prompt("(পাইলট এডমিন PIN লিখুন) (DEMO PIN: 2468)");
+                
+                // পিন কোড চেক (অবশ্যই ইংরেজি কিবোর্ডে ২৪৬৮ টাইপ করতে হবে)
+                if (pass === "2468") {
+                    // পিন সঠিক হলে অ্যাডমিন সেকশন দেখাবে
+                    $("#adminPage").removeClass("hidden");
+                } else if (pass !== null) {
+                    // পিন ভুল হলে অ্যালার্ট দেখাবে
+                    alert("পিন ভুল হয়েছে! অনুগ্রহ করে ইংরেজি কিবোর্ড ব্যবহার করুন।");
+                }
+            });
+
+            // ব্যাকড্রপ বা পপআপ বন্ধ করার জন্য স্ক্রিনের বাইরে ক্লিক করলে হাইড হবে (ঐচ্ছিক)
+            $("#adminPage").on("click", function(e) {
+                if (e.target === this) {
+                    $(this).addClass("hidden");
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
