@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>শেখ এগ্রো - খাঁটি পণ্যের সমাহার</title>
     <!-- Tailwind CSS (ডিজাইনের জন্য) এবং jQuery CDN -->
-    <script src="https://jsdelivr.net"></script>
-    <script src="https://jquery.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f7fafc; }
         .hidden { display: none; }
@@ -57,7 +57,7 @@
                 let pass = prompt("(পাইলট এডমিন PIN লিখুন) (DEMO PIN: 2468)");
                 
                 // পিন কোড চেক (অবশ্যই ইংরেজি কিবোর্ডে ২৪৬৮ টাইপ করতে হবে)
-                if (pass === "2840") {
+                if (pass === "2468") {
                     // পিন সঠিক হলে অ্যাডমিন সেকশন দেখাবে
                     $("#adminPage").removeClass("hidden");
                 } else if (pass !== null) {
