@@ -7,7 +7,8 @@
     <!-- Tailwind CSS (ডিজাইনের জন্য) এবং jQuery CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <style>
+   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script> <style>
         body { font-family: 'Arial', sans-serif; background-color: #f7fafc; }
         .hidden { display: none; }
     </style>
@@ -74,6 +75,50 @@
             });
         });
     </script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD3hHIJkwKswBrQ2GENXgczQPToNf-9ATE",
+  authDomain: "sheikh-agro.firebaseapp.com",
+  databaseURL: "https://sheikh-agro-default-rtdb.firebaseio.com",
+  projectId: "sheikh-agro",
+  storageBucket: "sheikh-agro.firebasestorage.app",
+  messagingSenderId: "626692427979",
+  appId: "1:626692427979:web:6db97abdb501bf8b980b4e",
+  measurementId: "G-D3479VJDKL"
+};",
+  authDomain: "sheikh-agro.firebaseapp.com",
+  databaseURL: "https://sheikh-agro-default-rtdb.firebaseio.com",
+  projectId: "sheikh-agro",
+  storageBucket: "sheikh-agro.firebasestorage.app",
+  messagingSenderId: "626692427979",
+  appId: "1:626692427979:web:6db97abdb501bf8b980b4e",
+  measurementId: "G-D3479VJDKL"
+};db"G-D
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
+const productContainer = document.getElementById("productContainer");
+
+db.collection("products").onSnapshot((snapshot) => {
+  productContainer.innerHTML = "";
+
+  if (snapshot.empty) {
+    productContainer.innerHTML = "<p>এখনো কোনো পণ্য যোগ করা হয়নি।</p>";
+    return;
+  }
+
+  snapshot.forEach((doc) => {
+    const p = doc.data();
+    productContainer.innerHTML += `
+      <div class="bg-white p-4 rounded-lg shadow text-center">
+        <h3 class="text-xl font-bold">${p.name || "পণ্যের নাম নেই"}</h3>
+        <p class="text-gray-700">দাম: ${p.price ?? "দাম নেই"} টাকা/${p.unit || "কেজি"}</p>
+      </div>`;
+  });
+}, (error) => {
+  productContainer.innerHTML = "<p>পণ্য লোড করা যায়নি। Firebase সেটিংস যাচাই করুন।</p>";
+  console.error(error);
+});
+</script>
 </body>
 </html>
